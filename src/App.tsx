@@ -1,9 +1,15 @@
 import './App.css'
-import ListGroup from './components/ListGroup'
+import GameGrid from "./components/GameGrid.tsx";
 
 function App() {
 
-  return <div><ListGroup /></div>
+  return (
+      <>
+        <div>
+          <GameGrid></GameGrid>
+        </div>
+      </>
+  )
 }
 
 export default App
