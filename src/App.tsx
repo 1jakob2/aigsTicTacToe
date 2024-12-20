@@ -1,15 +1,21 @@
 import './App.css'
-import GameGrid from "./components/GameGrid.tsx";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+import React from "react";
+import RegisterForm from "./components/forms/RegisterForm.tsx";
+import LoginForm from "./components/forms/LoginForm.tsx";
+import GameGrid from "./components/game/GameGrid.tsx";
 
-function App() {
+const App: React.FC = () => {
 
   return (
-      <>
-        <div>
-          <GameGrid></GameGrid>
-        </div>
-      </>
-  )
-}
+      <BrowserRouter>
+        <Routes>
+            <Route path="/register" element={<RegisterForm />}/>
+            <Route path="/login" element={<LoginForm />}/>
+            <Route path="/game" element={<GameGrid />}/>
+        </Routes>
+      </BrowserRouter>
+  );
+};
 
-export default App
+export default App;
