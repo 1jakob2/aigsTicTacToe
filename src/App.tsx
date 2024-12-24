@@ -1,10 +1,10 @@
-import './App.css'
+import '@/App.css'
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import React from "react";
-import RegisterForm from "./components/forms/RegisterForm.tsx";
-import LoginForm from "./components/forms/LoginForm.tsx";
-import GameGrid from "./components/game/GameGrid.tsx";
-import HomePage from "./components/home/HomePage.tsx";
+import RegisterForm from "@/components/forms/RegisterForm.tsx";
+import LoginForm from "@/components/forms/LoginForm.tsx";
+import GameGrid from "@/components/game/GameGrid.tsx";
+import HomePage from "@/components/home/HomePage.tsx";
 
 const App: React.FC = () => {
 

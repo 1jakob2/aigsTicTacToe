@@ -1,10 +1,10 @@
 import React, {useState} from "react";
 import {useLocation} from "react-router-dom";
-import useForm from "../../hooks/useForm.ts";
+import useForm from "@/hooks/useForm.ts";
 import TextInput from "./TextInput.tsx";
-import {loginUser} from "../../utils/api.ts";
-import {saveToLocalStorage} from "../../utils/storage.ts";
-import useCustomNavigate from "../../hooks/useCustomNavigate.ts";
+import {loginUser} from "@/utils/api.ts";
+import {saveToLocalStorage} from "@/utils/storage.ts";
+import useCustomNavigate from "@/hooks/useCustomNavigate.ts";
 import axios from "axios";
 
 const LoginForm: React.FC = () => {

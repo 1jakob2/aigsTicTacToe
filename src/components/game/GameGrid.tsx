@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Container, Row, Button} from 'react-bootstrap';
 import GameMessage from "./GameMessage.tsx";
 import GameCell from "./GameCell.tsx";
-import {checkWinner, isGridFull} from "../../utils/gameUtils.ts";
+import {checkWinner, isGridFull} from "@/utils/gameUtils.ts";
 
 const GameGrid: React.FC = () => {
     const gridSize = 3;

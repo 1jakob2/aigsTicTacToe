@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 import TextInput from "./TextInput.tsx";
-import useForm from "../../hooks/useForm.ts";
-import {registerUser} from "../../utils/api.ts";
-import useCustomNavigate from "../../hooks/useCustomNavigate.ts";
+import useForm from "@/hooks/useForm.ts";
+import {registerUser} from "@/utils/api.ts";
+import useCustomNavigate from "@/hooks/useCustomNavigate.ts";
 import axios from "axios";
 
 const RegisterForm: React.FC = () => {

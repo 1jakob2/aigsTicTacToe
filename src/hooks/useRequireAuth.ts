@@ -1,5 +1,5 @@
-import useAuth from "./useAuth.ts";
-import useCustomNavigate from "./useCustomNavigate.ts";
+import useAuth from "@/hooks/useAuth.ts";
+import useCustomNavigate from "@/hooks/useCustomNavigate.ts";
 import {useLocation} from "react-router-dom";
 import {useEffect} from "react";
 

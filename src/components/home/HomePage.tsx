@@ -1,8 +1,8 @@
 import React from "react";
-import useCustomNavigate from "../../hooks/useCustomNavigate.ts";
+import useCustomNavigate from "@/hooks/useCustomNavigate";
 import "@/App.css";
-import useAuth from "../../hooks/useAuth.ts";
-import { getFromLocalStorage } from "../../utils/storage.ts";
+import useAuth from "@/hooks/useAuth";
+import { getFromLocalStorage } from "@/utils/storage";
 
 const HomePage: React.FC = () => {
     const handleNavigate = useCustomNavigate();
