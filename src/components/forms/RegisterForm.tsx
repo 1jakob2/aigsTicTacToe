@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 import TextInput from "./TextInput.tsx";
 import useForm from "../../hooks/useForm.ts";
-import {useNavigate} from "react-router-dom";
 import {registerUser} from "../../utils/api.ts";
+import useCustomNavigate from "../../hooks/useCustomNavigate.ts";
 import axios from "axios";
 
 const RegisterForm: React.FC = () => {
@@ -18,7 +18,7 @@ const RegisterForm: React.FC = () => {
         validateRegistration
     } = useForm({});
     const [success, setSuccess] = useState<boolean>(false);
-    const navigate = useNavigate();
+    const handleNavigate = useCustomNavigate();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault(); // prevents the browser from reloading the page
@@ -30,7 +30,7 @@ const RegisterForm: React.FC = () => {
                 setSuccess(true);
 
                 setTimeout(() => {
-                    navigate("/login");
+                    handleNavigate("/login");
                 }, 1000);
             } catch (err: unknown) {
                 if (axios.isAxiosError(err)){
@@ -75,6 +75,18 @@ const RegisterForm: React.FC = () => {
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRepeatPassword(e.target.value)}
                         placeholder="Confirm your password again"
                     />
+                </div>
+                <div className="mt-4">
+                    <p>
+                        Already have an account?{" "}
+                        <span
+                            className="text-primary text-decoration-underline"
+                            onClick={() => handleNavigate("/login")}
+                            style={{cursor: "pointer"}}
+                        >
+                            Login here
+                        </span>
+                    </p>
                 </div>
                 <button type="submit" className="btn btn-primary w-100">
                     Register

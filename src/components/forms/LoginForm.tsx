@@ -2,13 +2,13 @@ import React, {useState} from "react";
 import useForm from "../../hooks/useForm.ts";
 import TextInput from "./TextInput.tsx";
 import {loginUser} from "../../utils/api.ts";
-import {useNavigate} from "react-router-dom";
+import useCustomNavigate from "../../hooks/useCustomNavigate.ts";
 import axios from "axios";
 
 const LoginForm: React.FC = () => {
     const {userName, setUserName, password, setPassword, error, setError, validateUser} = useForm({});
     const [success, setSuccess] = useState(false);
-    const navigate = useNavigate();
+    const handleNavigate = useCustomNavigate();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault(); // prevents the browser from reloading the page
@@ -18,7 +18,7 @@ const LoginForm: React.FC = () => {
                 const response = await loginUser({userName, password});
                 console.log("Form submitted!", response);
                 setSuccess(true);
-                navigate("/game");
+                handleNavigate("/game");
             } catch (err: unknown) {
                 if (axios.isAxiosError(err)) {
                     console.error("Login Failed:", err);
@@ -54,6 +54,18 @@ const LoginForm: React.FC = () => {
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                         placeholder="Enter your password"
                     />
+                </div>
+                <div className="mt-4">
+                    <p>
+                        No account yet?{" "}
+                        <span
+                            className="text-primary text-decoration-underline"
+                            onClick={() => handleNavigate("/register")}
+                            style={{cursor: "pointer"}}
+                        >
+                            Register here
+                        </span>
+                    </p>
                 </div>
                 <button type="submit" className="btn btn-primary w-100">
                     Login
