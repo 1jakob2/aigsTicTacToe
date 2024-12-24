@@ -1,7 +1,9 @@
 import React, {useState} from "react";
+import {useLocation} from "react-router-dom";
 import useForm from "../../hooks/useForm.ts";
 import TextInput from "./TextInput.tsx";
 import {loginUser} from "../../utils/api.ts";
+import {saveToLocalStorage} from "../../utils/storage.ts";
 import useCustomNavigate from "../../hooks/useCustomNavigate.ts";
 import axios from "axios";
 
@@ -9,16 +11,22 @@ const LoginForm: React.FC = () => {
     const {userName, setUserName, password, setPassword, error, setError, validateUser} = useForm({});
     const [success, setSuccess] = useState(false);
     const handleNavigate = useCustomNavigate();
+    const location = useLocation();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault(); // prevents the browser from reloading the page
 
         if (validateUser()) {
             try {
-                const response = await loginUser({userName, password});
-                console.log("Form submitted!", response);
+                const { token, userExpiry } = await loginUser({userName, password});
+                console.log("Form submitted!");
+                saveToLocalStorage("token", token);
+                saveToLocalStorage("userExpiry", userExpiry);
+                saveToLocalStorage("userName", userName);
                 setSuccess(true);
-                handleNavigate("/game");
+
+                const redirectTo = location.state?.from || "/";
+                handleNavigate(redirectTo);
             } catch (err: unknown) {
                 if (axios.isAxiosError(err)) {
                     console.error("Login Failed:", err);

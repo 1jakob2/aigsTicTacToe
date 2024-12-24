@@ -1,20 +1,32 @@
 import React from "react";
 import useCustomNavigate from "../../hooks/useCustomNavigate.ts";
 import "@/App.css";
+import useAuth from "../../hooks/useAuth.ts";
+import { getFromLocalStorage } from "../../utils/storage.ts";
 
 const HomePage: React.FC = () => {
     const handleNavigate = useCustomNavigate();
+    const {isAuthenticated, logout} = useAuth();
+    const userName = getFromLocalStorage("userName");
+
+    const handleAuthAction = () => {
+        if (isAuthenticated) {
+            logout();
+        } else {
+            handleNavigate("/login");
+        }
+    }
 
     return (
         <div className="container mt-5">
             {/* Header Section */}
             <div className="d-flex justify-content-between align-items-center">
-                <h1>Welcome to TicTacToe</h1>
+                <h1>Welcome{userName ? `, ${userName}` : " to TicTacToe"}</h1>
                 <button
-                    className="btn btn-primary"
-                    onClick={() => handleNavigate("/login")}
+                    className={`btn ${isAuthenticated ? "btn-danger" : "btn-primary"}`}
+                    onClick={handleAuthAction}
                 >
-                    Login
+                    {isAuthenticated ? "Logout" : "Login"}
                 </button>
             </div>
 
