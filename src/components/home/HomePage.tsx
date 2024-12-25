@@ -6,11 +6,15 @@ import { getFromLocalStorage } from "@/utils/storage";
 import axios from "axios";
 import { toast } from "react-toastify";
 import {logoutUser} from "@/utils/api.ts";
+import DropdownGameDifficulty from "@/components/shared/DropdownGameDifficulty.tsx";
+import ButtonPlayComputer from "@/components/home/ButtonPlayComputer.tsx";
+import useDropdownDifficulty from "@/hooks/useDropdownDifficulty.ts";
 
 const HomePage: React.FC = () => {
     const handleNavigate = useCustomNavigate();
     const {isAuthenticated, logout} = useAuth();
     const userName = getFromLocalStorage("userName");
+    const dropdown = useDropdownDifficulty();
 
     const handleAuthAction = async () => {
         if (isAuthenticated) {
@@ -34,7 +38,7 @@ const HomePage: React.FC = () => {
         } else {
             handleNavigate("/login");
         }
-    }
+    };
 
     return (
         <div className="container mt-5">
@@ -83,12 +87,8 @@ const HomePage: React.FC = () => {
                         <p>
                             Test your skills against an AI opponent and see if you can win!
                         </p>
-                        <button
-                            className="btn btn-secondary"
-                            onClick={() => handleNavigate("/?")}
-                        >
-                            Play Now
-                        </button>
+                        <DropdownGameDifficulty dropdown={dropdown}/>
+                        <ButtonPlayComputer dropdown={dropdown}/>
                     </div>
                 </div>
             </div>

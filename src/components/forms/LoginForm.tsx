@@ -45,10 +45,6 @@ const LoginForm: React.FC = () => {
         }
     };
 
-    // const handlePassword = async (plainPassword: string) => {
-    //     setPassword(await hashPassword(plainPassword));
-    // };
-
     return (
         <div className="container mt-5">
             <h2 className="text-center">Login</h2>
