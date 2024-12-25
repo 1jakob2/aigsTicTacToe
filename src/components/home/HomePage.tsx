@@ -3,15 +3,34 @@ import useCustomNavigate from "@/hooks/useCustomNavigate";
 import "@/App.css";
 import useAuth from "@/hooks/useAuth";
 import { getFromLocalStorage } from "@/utils/storage";
+import axios from "axios";
+import { toast } from "react-toastify";
+import {logoutUser} from "@/utils/api.ts";
 
 const HomePage: React.FC = () => {
     const handleNavigate = useCustomNavigate();
     const {isAuthenticated, logout} = useAuth();
     const userName = getFromLocalStorage("userName");
 
-    const handleAuthAction = () => {
+    const handleAuthAction = async () => {
         if (isAuthenticated) {
-            logout();
+            try {
+                if (!userName) {
+                    throw new Error("User not logged in. Cannot perform logout.");
+                }
+                const response = await logoutUser({userName});
+                console.log(response);
+                logout();
+                toast.success("You have successfully logged out!");
+            } catch (err: unknown) {
+                if (axios.isAxiosError(err)) {
+                    console.error("Logout Failed:", err);
+                    toast.error(err.message || "Logout failed, please try again.");
+                } else {
+                    console.error("Unexpected error:", err);
+                    toast.error("An unexpected error occurred. Please try again.");
+                }
+            }
         } else {
             handleNavigate("/login");
         }

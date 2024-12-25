@@ -6,6 +6,7 @@ import {loginUser} from "@/utils/api.ts";
 import {saveToLocalStorage} from "@/utils/storage.ts";
 import useCustomNavigate from "@/hooks/useCustomNavigate.ts";
 import axios from "axios";
+import {toast} from "react-toastify";
 
 const LoginForm: React.FC = () => {
     const {userName, setUserName, password, setPassword, error, setError, validateUser} = useForm({});
@@ -20,6 +21,7 @@ const LoginForm: React.FC = () => {
             try {
                 const { token, userExpiry } = await loginUser({userName, password});
                 console.log("Form submitted!");
+                toast.success("Login successful");
                 saveToLocalStorage("token", token);
                 saveToLocalStorage("userExpiry", userExpiry);
                 saveToLocalStorage("userName", userName);
@@ -31,6 +33,9 @@ const LoginForm: React.FC = () => {
                 if (axios.isAxiosError(err)) {
                     console.error("Login Failed:", err);
                     setError(err.response?.data?.message || "Login failed, please try again.");
+                } else if (err instanceof Error) {
+                    console.error("Custom error:", err.message);
+                    setError(err.message || "An error occurred during login.");
                 } else {
                     console.error("Unexpected error:", err);
                     setError("An unexpected error occurred. Please try again.");
