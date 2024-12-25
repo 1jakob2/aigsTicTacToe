@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import bcrypt from "bcryptjs";
 
 interface UseFormProps {
     initialUserName?: string;
@@ -60,6 +61,11 @@ const useForm = ({
         return true;
     }
 
+    const hashPassword = async (password: string): Promise<string> => {
+        const fixedSalt = "$2a$10$abcdefghijklmaopqestqv"; // fixed salt for easier implementation
+        return await bcrypt.hash(password, fixedSalt);
+    }
+
     return {
         userName,
         setUserName,
@@ -70,7 +76,8 @@ const useForm = ({
         error,
         setError,
         validateRegistration,
-        validateUser
+        validateUser,
+        hashPassword,
     };
 };
 export default useForm;

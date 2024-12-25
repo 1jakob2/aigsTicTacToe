@@ -9,7 +9,7 @@ import axios from "axios";
 import {toast} from "react-toastify";
 
 const LoginForm: React.FC = () => {
-    const {userName, setUserName, password, setPassword, error, setError, validateUser} = useForm({});
+    const {userName, setUserName, password, setPassword, error, setError, validateUser, hashPassword} = useForm({});
     const [success, setSuccess] = useState(false);
     const handleNavigate = useCustomNavigate();
     const location = useLocation();
@@ -19,7 +19,8 @@ const LoginForm: React.FC = () => {
 
         if (validateUser()) {
             try {
-                const { token, userExpiry } = await loginUser({userName, password});
+                const hashedPassword = await hashPassword(password);
+                const { token, userExpiry } = await loginUser({userName, password: hashedPassword});
                 console.log("Form submitted!");
                 toast.success("Login successful");
                 saveToLocalStorage("token", token);
@@ -42,7 +43,11 @@ const LoginForm: React.FC = () => {
                 }
             }
         }
-    }
+    };
+
+    // const handlePassword = async (plainPassword: string) => {
+    //     setPassword(await hashPassword(plainPassword));
+    // };
 
     return (
         <div className="container mt-5">

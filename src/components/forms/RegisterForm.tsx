@@ -15,7 +15,8 @@ const RegisterForm: React.FC = () => {
         setRepeatPassword,
         error,
         setError,
-        validateRegistration
+        validateRegistration,
+        hashPassword
     } = useForm({});
     const [success, setSuccess] = useState<boolean>(false);
     const handleNavigate = useCustomNavigate();
@@ -25,7 +26,8 @@ const RegisterForm: React.FC = () => {
 
         if (validateRegistration()) {
             try {
-                const response = await registerUser({userName, password});
+                const hashedPassword = await hashPassword(password);
+                const response = await registerUser({userName, password: hashedPassword});
                 console.log("Form submitted!", response);
                 setSuccess(true);
 
