@@ -1,6 +1,6 @@
 import {useState} from "react";
 
-const useDropdownDifficulty = (initialValue = "") => {
+const useDropdown = (initialValue = "") => {
     const [selectedValue, setSelectedValue] = useState<string>(initialValue);
     const [error, setError] = useState<string>("");
 
@@ -20,4 +20,4 @@ const useDropdownDifficulty = (initialValue = "") => {
         validate
     };
 };
-export default useDropdownDifficulty;
+export default useDropdown;

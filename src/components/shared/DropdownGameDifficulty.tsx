@@ -1,13 +1,13 @@
-import useDropdownDifficulty from "@/hooks/useDropdownDifficulty.ts";
+import useDropdown from "@/hooks/useDropdown.ts";
 
-const DropdownGameDifficulty: React.FC<{ dropdown: ReturnType<typeof useDropdownDifficulty>}> = ({dropdown}) => {
+const DropdownGameDifficulty: React.FC<{ dropdown: ReturnType<typeof useDropdown>}> = ({dropdown}) => {
     const {selectedValue, setSelectedValue, error} = dropdown;
 
     const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const value = event.target.value;
         setSelectedValue(value);
         console.log(value);
-    }
+    };
 
     return (
         <div className="mb-3">

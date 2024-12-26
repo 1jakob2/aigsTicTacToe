@@ -7,14 +7,19 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import {logoutUser} from "@/utils/api.ts";
 import DropdownGameDifficulty from "@/components/shared/DropdownGameDifficulty.tsx";
-import ButtonPlayComputer from "@/components/home/ButtonPlayComputer.tsx";
-import useDropdownDifficulty from "@/hooks/useDropdownDifficulty.ts";
+import ButtonPlayNow from "@/components/home/ButtonPlayNow.tsx";
+import useDropdown from "@/hooks/useDropdown.ts";
+import DropdownPlayUsers from "@/components/home/DropdownPlayUsers.tsx";
 
 const HomePage: React.FC = () => {
     const handleNavigate = useCustomNavigate();
     const {isAuthenticated, logout} = useAuth();
     const userName = getFromLocalStorage("userName");
-    const dropdown = useDropdownDifficulty();
+    const dropdowns = {
+        playComputer: useDropdown(),
+        playUser: useDropdown(),
+    };
+
 
     const handleAuthAction = async () => {
         if (isAuthenticated) {
@@ -75,20 +80,16 @@ const HomePage: React.FC = () => {
                         <p>
                             Challenge another logged-in user in an exciting online match!
                         </p>
-                        <button
-                            className="btn btn-secondary"
-                            onClick={() => handleNavigate("/?")}
-                        >
-                            Play Now
-                        </button>
+                        <DropdownPlayUsers dropdown={dropdowns.playUser}/>
+                        <ButtonPlayNow dropdown={dropdowns.playUser}/>
                     </div>
                     <div className="list-group-item">
                         <h4>Play against the computer</h4>
                         <p>
                             Test your skills against an AI opponent and see if you can win!
                         </p>
-                        <DropdownGameDifficulty dropdown={dropdown}/>
-                        <ButtonPlayComputer dropdown={dropdown}/>
+                        <DropdownGameDifficulty dropdown={dropdowns.playComputer}/>
+                        <ButtonPlayNow dropdown={dropdowns.playComputer}/>
                     </div>
                 </div>
             </div>

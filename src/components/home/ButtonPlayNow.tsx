@@ -1,8 +1,8 @@
 import React from "react";
-import useDropdownDifficulty from "@/hooks/useDropdownDifficulty.ts";
+import useDropdown from "@/hooks/useDropdown.ts";
 import useCustomNavigate from "@/hooks/useCustomNavigate.ts";
 
-const ButtonPlayComputer: React.FC<{ dropdown: ReturnType<typeof useDropdownDifficulty>}> = ({dropdown}) => {
+const ButtonPlayNow: React.FC<{ dropdown: ReturnType<typeof useDropdown>}> = ({dropdown}) => {
     const {selectedValue, validate} = dropdown;
     const handleNavigate = useCustomNavigate();
 
@@ -24,4 +24,4 @@ const ButtonPlayComputer: React.FC<{ dropdown: ReturnType<typeof useDropdownDiff
         </div>
     );
 };
-export default ButtonPlayComputer;
+export default ButtonPlayNow;
