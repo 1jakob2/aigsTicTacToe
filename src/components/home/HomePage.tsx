@@ -5,11 +5,12 @@ import useAuth from "@/hooks/useAuth";
 import { getFromLocalStorage } from "@/utils/storage";
 import axios from "axios";
 import { toast } from "react-toastify";
-import {logoutUser, newGame} from "@/utils/api.ts";
+import {logoutUser} from "@/utils/api.ts";
 import DropdownGameDifficulty from "@/components/shared/DropdownGameDifficulty.tsx";
 import ButtonPlayNow from "@/components/home/ButtonPlayNow.tsx";
 import useDropdown from "@/hooks/useDropdown.ts";
 import DropdownPlayUsers from "@/components/home/DropdownPlayUsers.tsx";
+import useStartComputerGame from "@/hooks/useStartComputerGame.ts";
 
 const HomePage: React.FC = () => {
     const handleNavigate = useCustomNavigate();
@@ -19,8 +20,8 @@ const HomePage: React.FC = () => {
         playComputer: useDropdown(),
         playUser: useDropdown(),
     };
-    const token = getFromLocalStorage("token");
     const [selectedDifficulty, setSelectedDifficulty] = useState<string | null>(null);
+    const { startComputerGame } = useStartComputerGame();
 
 
     const handleAuthAction = async () => {
@@ -47,22 +48,10 @@ const HomePage: React.FC = () => {
         }
     };
 
-    const startComputerGame = async (difficulty: string) => {
-        try{
-            if (!token){
-                return new Error("No token provided");
-            }
-            await newGame({token, gameType: "TicTacToe", difficulty});
-            handleNavigate("/game?mode=computer");
-        } catch (error) {
-            console.error("Error starting the game", error);
-            toast.error("Error starting the game");
-        }
-    };
-
-    const handleNavigateToGame = (mode: "local" | "computer" | "online", difficulty?: string) => {
+    const handleNavigateToGame = async (mode: "local" | "computer" | "online", difficulty?: string) => {
         if (mode === "computer" && difficulty) {
-            startComputerGame(difficulty);
+            await startComputerGame(difficulty);
+            handleNavigate("/game?mode=computer&difficulty=" + difficulty);
         } else if (mode === "local") {
             handleNavigate("/game?mode=local");
         } else if (mode === "online") {

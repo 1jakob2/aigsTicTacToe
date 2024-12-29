@@ -7,11 +7,15 @@ import {getFromLocalStorage} from "@/utils/storage.ts";
 import {gameMove} from "@/utils/api.ts";
 import {toast} from "react-toastify";
 import {useSearchParams} from "react-router-dom";
+import useStartComputerGame from "@/hooks/useStartComputerGame.ts";
+import DropdownGameDifficulty from "@/components/shared/DropdownGameDifficulty.tsx";
+import useDropdown from "@/hooks/useDropdown.ts";
 
 const GameGrid: React.FC = () => {
     const gridSize = 3;
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
     const mode = searchParams.get("mode");
+    const initialDifficulty = searchParams.get("difficulty") || "";
 
     const [grid, setGrid] = useState<string[][]>(
         Array(gridSize).fill(Array(gridSize).fill(""))
@@ -22,6 +26,8 @@ const GameGrid: React.FC = () => {
     const [isDraw, setIsDraw] = useState<boolean>(false);
     const [winningCells, setWinningCells] = useState<number[][] | null>(null);
     const token = getFromLocalStorage("token");
+    const { startComputerGame, difficulty, setDifficulty } = useStartComputerGame();
+    const dropdown = useDropdown();
 
 
     const handleCellClick = (rowIndex: number, colIndex: number) => {
@@ -74,17 +80,27 @@ const GameGrid: React.FC = () => {
         }
     }
 
-    const resetGame = () => {
+    const resetGame = async () => {
         setGrid(Array(gridSize).fill(Array(gridSize).fill("")));
         setWinner(null);
         setIsDraw(false);
         setIsXTurn(true);
         setWinningCells(null);
+
+        if (mode === "computer") {
+            await startComputerGame(difficulty);
+            setSearchParams({ ...Object.fromEntries(searchParams.entries()), difficulty: difficulty });
+        }
     };
 
     return (
         <Container className="mt-5">
             <h1 className="text-center mb-4">Tic-Tac-Toe</h1>
+            <DropdownGameDifficulty
+                dropdown={dropdown}
+                onSelect={(difficulty: string) => setDifficulty(difficulty)}
+                defaultValue={initialDifficulty}
+            />
             <div className="d-flex flex-column align-items-center">
                 {grid.map((row, rowIndex) => (
                         <Row key={rowIndex} className="justify-content-center">
@@ -106,7 +122,13 @@ const GameGrid: React.FC = () => {
             </div>
             <GameMessage winner={winner} isDraw={isDraw} isXTurn={isXTurn}/>
             <div className="text-center mt-4">
-                <Button variant="primary" onClick={resetGame}>
+                <Button variant="primary" onClick={() => {
+                    if (difficulty) {
+                        resetGame();
+                    } else {
+                        console.error("No difficulty selected");
+                    }
+                }}>
                     Reset Game
                 </Button>
             </div>
