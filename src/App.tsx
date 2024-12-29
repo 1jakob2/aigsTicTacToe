@@ -16,7 +16,7 @@ const App: React.FC = () => {
                   <Route path="/" element={<HomePage />}/>
                   <Route path="/register" element={<RegisterForm />}/>
                   <Route path="/login" element={<LoginForm />}/>
-                  <Route path="/game" element={<GameGrid />}/>
+                  <Route path="/game" element={<GameGrid/>}/>
               </Routes>
           </BrowserRouter>
           <ToastContainer

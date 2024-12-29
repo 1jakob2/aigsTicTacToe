@@ -31,3 +31,25 @@ export const getAllUsers = async () => {
     const response = await apiClient.get("/users");
     return response.data;
 };
+
+export const newGame = async (data: {token: string, gameType: string, difficulty: string}) => {
+    const response = await apiClient.post("/game/new", data);
+    return response.data;
+};
+
+type Board = [[number, number, number], [number, number, number], [number, number, number]];
+
+type GameMoveResponse = {
+    board: Board;
+    difficulty: number;
+    gameType: string;
+    options: string | null;
+    result: boolean;
+    token: string;
+};
+
+
+export const gameMove = async (data: {token: string, row: string, col: string}): Promise<GameMoveResponse> => {
+    const response = await apiClient.post<GameMoveResponse>("/game/move", data);
+    return response.data;
+};

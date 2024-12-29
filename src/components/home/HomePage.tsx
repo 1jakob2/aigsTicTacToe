@@ -1,11 +1,11 @@
-import React from "react";
+import React, {useState} from "react";
 import useCustomNavigate from "@/hooks/useCustomNavigate";
 import "@/App.css";
 import useAuth from "@/hooks/useAuth";
 import { getFromLocalStorage } from "@/utils/storage";
 import axios from "axios";
 import { toast } from "react-toastify";
-import {logoutUser} from "@/utils/api.ts";
+import {logoutUser, newGame} from "@/utils/api.ts";
 import DropdownGameDifficulty from "@/components/shared/DropdownGameDifficulty.tsx";
 import ButtonPlayNow from "@/components/home/ButtonPlayNow.tsx";
 import useDropdown from "@/hooks/useDropdown.ts";
@@ -19,6 +19,8 @@ const HomePage: React.FC = () => {
         playComputer: useDropdown(),
         playUser: useDropdown(),
     };
+    const token = getFromLocalStorage("token");
+    const [selectedDifficulty, setSelectedDifficulty] = useState<string | null>(null);
 
 
     const handleAuthAction = async () => {
@@ -45,6 +47,29 @@ const HomePage: React.FC = () => {
         }
     };
 
+    const startComputerGame = async (difficulty: string) => {
+        try{
+            if (!token){
+                return new Error("No token provided");
+            }
+            await newGame({token, gameType: "TicTacToe", difficulty});
+            handleNavigate("/game?mode=computer");
+        } catch (error) {
+            console.error("Error starting the game", error);
+            toast.error("Error starting the game");
+        }
+    };
+
+    const handleNavigateToGame = (mode: "local" | "computer" | "online", difficulty?: string) => {
+        if (mode === "computer" && difficulty) {
+            startComputerGame(difficulty);
+        } else if (mode === "local") {
+            handleNavigate("/game?mode=local");
+        } else if (mode === "online") {
+            handleNavigate("/game?mode=online");
+        }
+    }
+
     return (
         <div className="container mt-5">
             {/* Header Section */}
@@ -70,7 +95,7 @@ const HomePage: React.FC = () => {
                         </p>
                         <button
                             className="btn btn-secondary"
-                            onClick={() => handleNavigate("/game")}
+                            onClick={() => handleNavigateToGame("local")}
                         >
                             Play Now
                         </button>
@@ -81,15 +106,31 @@ const HomePage: React.FC = () => {
                             Challenge another logged-in user in an exciting online match!
                         </p>
                         <DropdownPlayUsers dropdown={dropdowns.playUser}/>
-                        <ButtonPlayNow dropdown={dropdowns.playUser}/>
+                        <ButtonPlayNow
+                            dropdown={dropdowns.playUser}
+                            onClick={() => handleNavigateToGame("online")}
+                        />
                     </div>
                     <div className="list-group-item">
                         <h4>Play against the computer</h4>
                         <p>
                             Test your skills against an AI opponent and see if you can win!
                         </p>
-                        <DropdownGameDifficulty dropdown={dropdowns.playComputer}/>
-                        <ButtonPlayNow dropdown={dropdowns.playComputer}/>
+                        <DropdownGameDifficulty
+                            dropdown={dropdowns.playComputer}
+                            onSelect={(difficulty: string) => setSelectedDifficulty(difficulty)}
+                        />
+                        <ButtonPlayNow
+                            dropdown={dropdowns.playComputer}
+                            onClick={() => {
+                                if (selectedDifficulty) {
+                                    handleNavigateToGame("computer", selectedDifficulty);
+                                } else {
+                                    console.error("No difficulty selected");
+                                }
+                            }
+                        }
+                        />
                     </div>
                 </div>
             </div>

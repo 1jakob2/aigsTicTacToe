@@ -1,11 +1,12 @@
 import useDropdown from "@/hooks/useDropdown.ts";
 
-const DropdownGameDifficulty: React.FC<{ dropdown: ReturnType<typeof useDropdown>}> = ({dropdown}) => {
+const DropdownGameDifficulty: React.FC<{ dropdown: ReturnType<typeof useDropdown>, onSelect: (value: string) => void}> = ({dropdown, onSelect}) => {
     const {selectedValue, setSelectedValue, error} = dropdown;
 
     const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const value = event.target.value;
         setSelectedValue(value);
+        onSelect(value);
         console.log(value);
     };
 

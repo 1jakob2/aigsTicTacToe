@@ -3,9 +3,15 @@ import {Container, Row, Button} from 'react-bootstrap';
 import GameMessage from "./GameMessage.tsx";
 import GameCell from "./GameCell.tsx";
 import {checkWinner, isGridFull} from "@/utils/gameUtils.ts";
+import {getFromLocalStorage} from "@/utils/storage.ts";
+import {gameMove} from "@/utils/api.ts";
+import {toast} from "react-toastify";
+import {useSearchParams} from "react-router-dom";
 
 const GameGrid: React.FC = () => {
     const gridSize = 3;
+    const [searchParams] = useSearchParams();
+    const mode = searchParams.get("mode");
 
     const [grid, setGrid] = useState<string[][]>(
         Array(gridSize).fill(Array(gridSize).fill(""))
@@ -15,27 +21,56 @@ const GameGrid: React.FC = () => {
     const [winner, setWinner] = useState<string | null>(null);
     const [isDraw, setIsDraw] = useState<boolean>(false);
     const [winningCells, setWinningCells] = useState<number[][] | null>(null);
+    const token = getFromLocalStorage("token");
 
 
     const handleCellClick = (rowIndex: number, colIndex: number) => {
         // only execute if the cell is empty
-        if (grid[rowIndex][colIndex] === "") {
-            const newGrid = grid.map((row, rowI) => // rowI iterates through the three rows
-                row.map((cell, colI) => ( // for each row, colI iterates through the three columns
-                    // if the right position is found, "X" is returned, otherwise the cell is returned
-                    rowI === rowIndex && colI === colIndex ? (isXTurn ? "X" : "O") : cell
-                ))
-            );
-            setGrid(newGrid);
-            const {winner: gameWinner, cells} = checkWinner(newGrid);
-            if (gameWinner) { // null is a falsy value, therefore continue, "X" or "O" is a truthy value therefore a winner is found
-                setWinner(gameWinner);
-                setWinningCells(cells);
-            } else if (isGridFull(newGrid)) {
-                setIsDraw(true);
-            } else {
-                setIsXTurn(!isXTurn); // toggle
+        if (mode === "local") {
+            if (grid[rowIndex][colIndex] === "") {
+                const newGrid = grid.map((row, rowI) => // rowI iterates through the three rows
+                    row.map((cell, colI) => ( // for each row, colI iterates through the three columns
+                        // if the right position is found, "X" is returned, otherwise the cell is returned
+                        rowI === rowIndex && colI === colIndex ? (isXTurn ? "X" : "O") : cell
+                    ))
+                );
+                setGrid(newGrid);
+                const {winner: gameWinner, cells} = checkWinner(newGrid);
+                if (gameWinner) { // null is a falsy value, therefore continue, "X" or "O" is a truthy value therefore a winner is found
+                    setWinner(gameWinner);
+                    setWinningCells(cells);
+                } else if (isGridFull(newGrid)) {
+                    setIsDraw(true);
+                } else {
+                    setIsXTurn(!isXTurn); // toggle
+                }
             }
+        } else if (mode === "computer") {
+            handleComputerMove(rowIndex, colIndex);
+        }
+    };
+
+    const handleComputerMove = async (rowIndex: number, colIndex: number) => {
+        if (!token){
+            return;
+        }
+
+        try {
+            const response = await gameMove({token, row: rowIndex.toString(), col: colIndex.toString()});
+            const newGrid = response.board.map(row => row.map(cell => cell === 1 ? "X" : cell === -1 ? "O" : ""));
+            setGrid(newGrid);
+
+            const {winner, cells} = checkWinner(newGrid);
+
+            if (winner) {
+                setWinner(winner);
+                setWinningCells(cells);
+            }else if (isGridFull(newGrid)) {
+                setIsDraw(true);
+            }
+        } catch (error) {
+            console.log("Error with computers move", error);
+            toast.error("Computer move error");
         }
     }
 
