@@ -10,6 +10,8 @@ import {useSearchParams} from "react-router-dom";
 import useStartComputerGame from "@/hooks/useStartComputerGame.ts";
 import DropdownGameDifficulty from "@/components/shared/DropdownGameDifficulty.tsx";
 import useDropdown from "@/hooks/useDropdown.ts";
+import useAuthRedirect from "@/hooks/useAuthRedirect.ts";
+import useCustomNavigate from "@/hooks/useCustomNavigate.ts";
 
 const GameGrid: React.FC = () => {
     const gridSize = 3;
@@ -28,6 +30,8 @@ const GameGrid: React.FC = () => {
     const token = getFromLocalStorage("token");
     const { startComputerGame, difficulty, setDifficulty } = useStartComputerGame();
     const dropdown = useDropdown();
+    const handleNavigate = useCustomNavigate();
+    useAuthRedirect();
 
 
     const handleCellClick = (rowIndex: number, colIndex: number) => {
@@ -95,12 +99,25 @@ const GameGrid: React.FC = () => {
 
     return (
         <Container className="mt-5">
-            <h1 className="text-center mb-4">Tic-Tac-Toe</h1>
-            <DropdownGameDifficulty
-                dropdown={dropdown}
-                onSelect={(difficulty: string) => setDifficulty(difficulty)}
-                defaultValue={initialDifficulty}
-            />
+            <div className="d-flex align-items-center justify-content-between">
+                <Button variant="primary" onClick={() => {
+                    handleNavigate("/");
+                }}>
+                    Back to Home
+                </Button>
+                <h1 className="text-center">
+                    Tic-Tac-Toe
+                </h1>
+                <div style={{width: "100px"}}></div>
+            </div>
+            {mode === "computer" && <div className="d-flex justify-content-center">
+                <DropdownGameDifficulty
+                    dropdown={dropdown}
+                    onSelect={(difficulty: string) => setDifficulty(difficulty)}
+                    defaultValue={initialDifficulty}
+                    widthClass="w-50"
+                />
+            </div>}
             <div className="d-flex flex-column align-items-center">
                 {grid.map((row, rowIndex) => (
                         <Row key={rowIndex} className="justify-content-center">
@@ -123,11 +140,7 @@ const GameGrid: React.FC = () => {
             <GameMessage winner={winner} isDraw={isDraw} isXTurn={isXTurn}/>
             <div className="text-center mt-4">
                 <Button variant="primary" onClick={() => {
-                    if (difficulty) {
-                        resetGame();
-                    } else {
-                        console.error("No difficulty selected");
-                    }
+                    resetGame();
                 }}>
                     Reset Game
                 </Button>

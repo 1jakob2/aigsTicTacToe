@@ -5,7 +5,8 @@ const DropdownGameDifficulty: React.FC<{
     dropdown: ReturnType<typeof useDropdown>;
     onSelect: (value: string) => void;
     defaultValue?: string;
-}> = ({dropdown, onSelect, defaultValue}) => {
+    widthClass: string;
+}> = ({dropdown, onSelect, defaultValue, widthClass}) => {
     const {selectedValue, setSelectedValue, error} = dropdown;
 
     React.useEffect(() => {
@@ -29,7 +30,7 @@ const DropdownGameDifficulty: React.FC<{
             </label>
             <select
                 id="dropdown"
-                className={`form-select w-25 ${error ? "is-invalid" : ""}`}
+                className={`form-select ${widthClass} ${error ? "is-invalid" : ""}`}
                 value={selectedValue}
                 onChange={handleChange}
             >

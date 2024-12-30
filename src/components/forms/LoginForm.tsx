@@ -13,6 +13,7 @@ const LoginForm: React.FC = () => {
     const [success, setSuccess] = useState(false);
     const handleNavigate = useCustomNavigate();
     const location = useLocation();
+    const redirect = new URLSearchParams(location.search).get("redirect") || "/";
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault(); // prevents the browser from reloading the page
@@ -28,8 +29,8 @@ const LoginForm: React.FC = () => {
                 saveToLocalStorage("userName", userName);
                 setSuccess(true);
 
-                const redirectTo = location.state?.from || "/";
-                handleNavigate(redirectTo);
+                //const redirectTo = location.state?.from || "/";
+                handleNavigate(redirect, { replace: true });
             } catch (err: unknown) {
                 if (axios.isAxiosError(err)) {
                     console.error("Login Failed:", err);

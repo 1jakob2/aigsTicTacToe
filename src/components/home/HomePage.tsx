@@ -9,7 +9,6 @@ import {logoutUser} from "@/utils/api.ts";
 import DropdownGameDifficulty from "@/components/shared/DropdownGameDifficulty.tsx";
 import ButtonPlayNow from "@/components/home/ButtonPlayNow.tsx";
 import useDropdown from "@/hooks/useDropdown.ts";
-import DropdownPlayUsers from "@/components/home/DropdownPlayUsers.tsx";
 import useStartComputerGame from "@/hooks/useStartComputerGame.ts";
 
 const HomePage: React.FC = () => {
@@ -48,14 +47,12 @@ const HomePage: React.FC = () => {
         }
     };
 
-    const handleNavigateToGame = async (mode: "local" | "computer" | "online", difficulty?: string) => {
+    const handleNavigateToGame = async (mode: "local" | "computer", difficulty?: string) => {
         if (mode === "computer" && difficulty) {
             await startComputerGame(difficulty);
             handleNavigate("/game?mode=computer&difficulty=" + difficulty);
-        } else if (mode === "local") {
+        } else {
             handleNavigate("/game?mode=local");
-        } else if (mode === "online") {
-            handleNavigate("/game?mode=online");
         }
     }
 
@@ -90,17 +87,6 @@ const HomePage: React.FC = () => {
                         </button>
                     </div>
                     <div className="list-group-item">
-                        <h4>Two logged in users play each other</h4>
-                        <p>
-                            Challenge another logged-in user in an exciting online match!
-                        </p>
-                        <DropdownPlayUsers dropdown={dropdowns.playUser}/>
-                        <ButtonPlayNow
-                            dropdown={dropdowns.playUser}
-                            onClick={() => handleNavigateToGame("online")}
-                        />
-                    </div>
-                    <div className="list-group-item">
                         <h4>Play against the computer</h4>
                         <p>
                             Test your skills against an AI opponent and see if you can win!
@@ -108,6 +94,7 @@ const HomePage: React.FC = () => {
                         <DropdownGameDifficulty
                             dropdown={dropdowns.playComputer}
                             onSelect={(difficulty: string) => setSelectedDifficulty(difficulty)}
+                            widthClass="w-25"
                         />
                         <ButtonPlayNow
                             dropdown={dropdowns.playComputer}
