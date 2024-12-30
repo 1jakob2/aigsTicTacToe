@@ -31,7 +31,9 @@ const GameGrid: React.FC = () => {
     const { startComputerGame, difficulty, setDifficulty } = useStartComputerGame();
     const dropdown = useDropdown();
     const handleNavigate = useCustomNavigate();
-    useAuthRedirect();
+
+    const shouldRedirect = mode === "computer";
+    useAuthRedirect(shouldRedirect);
 
 
     const handleCellClick = (rowIndex: number, colIndex: number) => {
