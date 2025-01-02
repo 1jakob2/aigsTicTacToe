@@ -2,9 +2,9 @@ import React, {useState} from "react";
 import useCustomNavigate from "@/hooks/useCustomNavigate";
 import "@/App.css";
 import useAuth from "@/hooks/useAuth";
-import { getFromLocalStorage } from "@/utils/storage";
+import {getFromLocalStorage} from "@/utils/storage";
 import axios from "axios";
-import { toast } from "react-toastify";
+import {toast} from "react-toastify";
 import {logoutUser} from "@/utils/api.ts";
 import DropdownGameDifficulty from "@/components/shared/DropdownGameDifficulty.tsx";
 import ButtonPlayNow from "@/components/home/ButtonPlayNow.tsx";
@@ -20,7 +20,7 @@ const HomePage: React.FC = () => {
         playUser: useDropdown(),
     };
     const [selectedDifficulty, setSelectedDifficulty] = useState<string | null>(null);
-    const { startComputerGame } = useStartComputerGame();
+    const {startComputerGame} = useStartComputerGame();
 
 
     const handleAuthAction = async () => {
@@ -105,7 +105,7 @@ const HomePage: React.FC = () => {
                                     console.error("No difficulty selected");
                                 }
                             }
-                        }
+                            }
                         />
                     </div>
                 </div>

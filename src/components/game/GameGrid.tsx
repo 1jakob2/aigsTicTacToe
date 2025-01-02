@@ -28,7 +28,7 @@ const GameGrid: React.FC = () => {
     const [isDraw, setIsDraw] = useState<boolean>(false);
     const [winningCells, setWinningCells] = useState<number[][] | null>(null);
     const token = getFromLocalStorage("token");
-    const { startComputerGame, difficulty, setDifficulty } = useStartComputerGame();
+    const {startComputerGame, difficulty, setDifficulty} = useStartComputerGame();
     const dropdown = useDropdown();
     const handleNavigate = useCustomNavigate();
 
@@ -63,7 +63,7 @@ const GameGrid: React.FC = () => {
     };
 
     const handleComputerMove = async (rowIndex: number, colIndex: number) => {
-        if (!token){
+        if (!token) {
             return;
         }
 
@@ -77,7 +77,7 @@ const GameGrid: React.FC = () => {
             if (winner) {
                 setWinner(winner);
                 setWinningCells(cells);
-            }else if (isGridFull(newGrid)) {
+            } else if (isGridFull(newGrid)) {
                 setIsDraw(true);
             }
         } catch (error) {
@@ -95,7 +95,7 @@ const GameGrid: React.FC = () => {
 
         if (mode === "computer") {
             await startComputerGame(difficulty);
-            setSearchParams({ ...Object.fromEntries(searchParams.entries()), difficulty: difficulty });
+            setSearchParams({...Object.fromEntries(searchParams.entries()), difficulty: difficulty});
         }
     };
 

@@ -35,7 +35,7 @@ const RegisterForm: React.FC = () => {
                     handleNavigate("/login");
                 }, 1000);
             } catch (err: unknown) {
-                if (axios.isAxiosError(err)){
+                if (axios.isAxiosError(err)) {
                     console.error("Registration Failed:", err);
                     setError(err.response?.data?.message || "Registration failed, please try again.");
                 } else {

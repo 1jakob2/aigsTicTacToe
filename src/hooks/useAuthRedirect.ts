@@ -13,7 +13,7 @@ const useAuthRedirect = (shouldRedirect: boolean) => {
         if (shouldRedirect) {
             if (!token) {
                 const redirectPath = `${location.pathname}${location.search}`;
-                handleNavigate(`/login?redirect=${encodeURIComponent(redirectPath)}`, { replace: true });
+                handleNavigate(`/login?redirect=${encodeURIComponent(redirectPath)}`, {replace: true});
             }
         }
     }, [handleNavigate, location, token]);

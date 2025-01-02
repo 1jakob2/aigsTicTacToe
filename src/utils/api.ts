@@ -7,12 +7,12 @@ const apiClient = axios.create({
     },
 });
 
-export const registerUser = async (data: {userName: string, password: string}) => {
+export const registerUser = async (data: { userName: string, password: string }) => {
     const response = await apiClient.post("/users/register", data);
     return response.data;
 };
 
-export const loginUser = async (data: {userName: string, password: string}) => {
+export const loginUser = async (data: { userName: string, password: string }) => {
     const response = await apiClient.post("/users/login", data);
     const responseData = response.data;
 
@@ -22,7 +22,7 @@ export const loginUser = async (data: {userName: string, password: string}) => {
     return responseData;
 };
 
-export const logoutUser = async (data: {userName: string}) => {
+export const logoutUser = async (data: { userName: string }) => {
     const response = await apiClient.post("/users/logout", data);
     return response.data;
 };
@@ -32,7 +32,7 @@ export const getAllUsers = async () => {
     return response.data;
 };
 
-export const newGame = async (data: {token: string, gameType: string, difficulty: string}) => {
+export const newGame = async (data: { token: string, gameType: string, difficulty: string }) => {
     const response = await apiClient.post("/game/new", data);
     return response.data;
 };
@@ -49,7 +49,7 @@ type GameMoveResponse = {
 };
 
 
-export const gameMove = async (data: {token: string, row: string, col: string}): Promise<GameMoveResponse> => {
+export const gameMove = async (data: { token: string, row: string, col: string }): Promise<GameMoveResponse> => {
     const response = await apiClient.post<GameMoveResponse>("/game/move", data);
     return response.data;
 };

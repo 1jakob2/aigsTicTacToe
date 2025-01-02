@@ -11,8 +11,8 @@ const useStartComputerGame = () => {
         const token = localStorage.getItem("token");
         setDifficulty(difficulty);
 
-        try{
-            if (!token){
+        try {
+            if (!token) {
                 return new Error("No token provided");
             }
             setLoading(true);
@@ -24,7 +24,7 @@ const useStartComputerGame = () => {
             setLoading(false);
         }
     };
-    return { startComputerGame, isLoading, difficulty, setDifficulty };
+    return {startComputerGame, isLoading, difficulty, setDifficulty};
 
 };
 export default useStartComputerGame;

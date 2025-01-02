@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { getFromLocalStorage, clearLocalStorage } from "@/utils/storage.ts";
+import {useState, useEffect} from "react";
+import {getFromLocalStorage, clearLocalStorage} from "@/utils/storage.ts";
 
 const useAuth = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -23,6 +23,6 @@ const useAuth = () => {
         setIsAuthenticated(false);
     };
 
-    return { isAuthenticated, logout };
+    return {isAuthenticated, logout};
 };
 export default useAuth;

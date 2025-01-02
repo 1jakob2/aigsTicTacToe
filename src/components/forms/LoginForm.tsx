@@ -21,7 +21,7 @@ const LoginForm: React.FC = () => {
         if (validateUser()) {
             try {
                 const hashedPassword = await hashPassword(password);
-                const { token, userExpiry } = await loginUser({userName, password: hashedPassword});
+                const {token, userExpiry} = await loginUser({userName, password: hashedPassword});
                 console.log("Form submitted!");
                 toast.success("Login successful");
                 saveToLocalStorage("token", token);
@@ -30,7 +30,7 @@ const LoginForm: React.FC = () => {
                 setSuccess(true);
 
                 //const redirectTo = location.state?.from || "/";
-                handleNavigate(redirect, { replace: true });
+                handleNavigate(redirect, {replace: true});
             } catch (err: unknown) {
                 if (axios.isAxiosError(err)) {
                     console.error("Login Failed:", err);

@@ -1,4 +1,4 @@
-export const checkWinner = (grid: string[][]): {winner: string | null, cells: number[][] | null} => {
+export const checkWinner = (grid: string[][]): { winner: string | null, cells: number[][] | null } => {
     const gridSize = grid.length;
     for (let i = 0; i < gridSize; i++) {
         // Check rows, grid[i][0] if i == 0 then we're top left

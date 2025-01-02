@@ -10,7 +10,7 @@ const DropdownGameDifficulty: React.FC<{
     const {selectedValue, setSelectedValue, error} = dropdown;
 
     React.useEffect(() => {
-        if (defaultValue && !selectedValue){
+        if (defaultValue && !selectedValue) {
             setSelectedValue(defaultValue);
             onSelect(defaultValue);
         }
